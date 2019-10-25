@@ -1,78 +1,167 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"
+	pageEncoding="utf-8"%>
 <!DOCTYPE html>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
-<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form" %>
-<html>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<html lang="pt-br" ng-app="papelariaManager">
 <head>
-<link href="/css/app.css" rel="stylesheet"/>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular-route.min.js"></script>
-<script type="text/javascript" src="js/app.js"></script>
-<meta charset="ISO-8859-1">
-<title>Papelaria</title>
+<meta charset="utf-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>{{titulo}}</title>
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+<!-- link href="/css/papelaria.css" rel="stylesheet" /> -->
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular-route.min.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+<script type="text/javascript">
+	document.addEventListener('DOMContentLoaded', function() {
+		var elems = document.querySelectorAll('#modal1');
+		var instances = M.Modal.init(elems);
+	});
+</script>
+
+<script type="text/javascript" src="js/app/app.js"></script>
+
 </head>
-<body ng-app="papelariaManager">
-	<div class="App" ng-controller="papelariaController">
-	<br/>
-	<h4 class="papelaria">Gerenciador Papelaria</h4>
-	
-	<form name="papelariaForm" novalidate ng-submit="submitForm()">
-		<table>
-			<tr>
-				<th colspan="2">Cadastrar Produtos</th>
-			</tr>
-			<tr>
-				<td>Código de barras</td>
-				<td><input type="number" name="barcode" required ng-model="produto.barcode"></td>
-				<td ng-show="papelariaForm.barcode.$invalid && papelariaForm.barcode.$dirty">Campo obrigatório!</td>
-			</tr>
-			<tr>
-				<td>Nome do produto</td>
-				<td><input type="text" name="nome" required ng-model="produto.nome"></td>
-				<td ng-show="papelariaForm.nome.$invalid && papelariaForm.nome.$dirty">Campo obrigatório!</td>
-			</tr>
-			<tr>
-				<td>Descrição do produto</td>
-				<td><input type="text" name="descricao" required ng-model="produto.descricao"></td>
-				<td ng-show="papelariaForm.descricao.$invalid && papelariaForm.descricao.$dirty">Campo obrigatório!</td>
-			</tr>
-			<tr>
-				<td>Quantidade</td>
-				<td><input type="number" name="quantidade" required ng-model="produto.quantidade"></td>
-				<td ng-show="papelariaForm.quantidade.$invalid && papelariaForm.quantidade.$dirty">Campo obrigatório!</td>
-			</tr>
-			<tr>
-				<td>Categoria do produto</td>
-				<td>
-					<select id="descCategoria" required ng-model="papelariaForm.descCategoria" ng-options="x for x in descCategoria">
-						<input type="hidden" ng-model="papelariaForm.produto.categoria.id" />
-					
-					</select>
+<body ng-controller="papelariaController">
+	<header class="container">
+		<h2 ng-bind="titulo"></h2>
+	</header>
+	<main class="container">
+
+	<div class="row">
+		<input type="text" ng-model="busca.nome"
+			placeholder="Busca de produtos" />
+
+	</div>
+	<div class="App">
+		<br />
+		<h4 class="papelaria">Gerenciador Papelaria</h4>
+
+		<form name="papelariaForm" novalidate ng-submit="submitForm()">
+			<table>
+				<tr>
+					<th colspan="2">Cadastrar Produtos</th>
+				</tr>
+				<tr>
+					<td>CÃ³digo de barras</td>
+					<td><input type="number" name="barcode" required
+						ng-model="produto.barcode"></td>
+					<td
+						ng-show="papelariaForm.barcode.$invalid && papelariaForm.barcode.$dirty">Campo
+						obrigatÃ³rio!</td>
+				</tr>
+				<tr>
+					<td>Nome do produto</td>
+					<td><input type="text" name="nome" required
+						ng-model="produto.nome"></td>
+					<td
+						ng-show="papelariaForm.nome.$invalid && papelariaForm.nome.$dirty">Campo
+						obrigatÃ³rio!</td>
+				</tr>
+				<tr>
+					<td>DescriÃ§Ã£o do produto</td>
+					<td><input type="text" name="descricao" required
+						ng-model="produto.descricao"></td>
+					<td
+						ng-show="papelariaForm.descricao.$invalid && papelariaForm.descricao.$dirty">Campo
+						obrigatÃ³rio!</td>
+				</tr>
+				<tr>
+					<td>Quantidade</td>
+					<td><input type="number" name="quantidade" required
+						ng-model="produto.quantidade"></td>
+					<td
+						ng-show="papelariaForm.quantidade.$invalid && papelariaForm.quantidade.$dirty">Campo
+						obrigatÃ³rio!</td>
+				</tr>
+				<tr>
+					<td>Categoria do produto</td>
+					<td><select id="descCategoria" required
+						ng-model="papelariaForm.descCategoria"
+						ng-options="x for x in descCategoria">
+							<input type="hidden"
+							ng-model="papelariaForm.produto.categoria.id" />
+
+					</select></td>
+					<td
+						ng-show="papelariaForm.descCategoria.$invalid && papelariaForm.descCategoria.$dirty">Campo
+						obrigatÃ³rio!</td>
+				</tr>
+				<tr>
+					<td colspan="2"><input type="submit" value="Cadastrar Produto"
+						class="blue-button"></td>
+				</tr>
+			</table>
+		</form>
+
+		<table class="highlight">
+			<tr ng-repeat="produto in produtos | filter:busca">
+				<td>{{produto.barcode}}</td>
+				<td>{{produto.nome}}</td>
+				<td>{{produto.descricao}}</td>
+				<td>{{produto.quantidade}}</td>
+				<td>{{produto.descCategoria}}</td>
+				<td><a ng-click="atualizarProduto(produto)" class="blue-button">Editar</a>
+					<a ng-click="removerProduto(produto)" class="red-button">Apagar</a>
 				</td>
-				<td ng-show="papelariaForm.descCategoria.$invalid && papelariaForm.descCategoria.$dirty">Campo obrigatório!</td>
 			</tr>
 			<tr>
-				<td colspan="2"><input type="submit" value="Cadastrar Produto" class="blue-button">
-				</td>
+				<td>MÃ©dia da quantidade de produtos:</td>
+				<td>{{media(produtos)}}</td>
 			</tr>
 		</table>
-	</form>
-	
-	<table>
-		<tr ng-repeat="produto in produtos">
-			<td>{{produto.barcode}}</td>
-			<td>{{produto.nome}}</td>
-			<td>{{produto.descricao}}</td>
-			<td>{{produto.quantidade}}</td>
-			<td>{{produto.descCategoria}}</td>
-			<td>
-				<a ng-click="atualizarProduto(produto)" class="blue-button">Editar</a>
-				<a ng-click="removerProduto(produto)" class="red-button">Apagar</a>
-			</td>
-		</tr>
-	</table>
+
+		<div class="row">
+			<!-- Modal Trigger -->
+			<a class="waves-effect waves-light btn modal-trigger" href="#modal1">Cadastrar
+				produto</a>
+
+		</div>
+
+
+
+		<!-- Modal Structure -->
+		<div id="modal1" class="modal modal-fixed-footer">
+			<div class="modal-content">
+				<h4>Cadastro de produtos</h4>
+				<p>Preencha os dados do novo produto</p>
+
+				<div class="row">
+					<div class="input-field col m6 s6">
+						<input type="number" class="validate" pattern="[0-9]*" required>
+						<label for="last_name">CÃ³digo de barras</label>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="input-field col m6 s6">
+						<input type="text" class="validate">
+						<label for="last_name">Nome</label>
+					</div>
+				</div>
+
+			</div>
+			<div class="modal-footer">
+				<a href="#!" class="modal-close waves-effect waves-green btn-flat">Adicionar</a>
+			</div>
+		</div>
+
 	</div>
+	</main>
+
+
+
 </body>
 </html>
