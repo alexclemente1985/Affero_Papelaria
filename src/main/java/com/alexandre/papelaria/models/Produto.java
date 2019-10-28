@@ -2,12 +2,17 @@ package com.alexandre.papelaria.models;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "PRODUTO")
@@ -29,8 +34,9 @@ public class Produto implements Serializable {
 	@Column(name = "QUANTIDADE")
 	private Integer quantidade;
 
-	@ManyToOne
-	@JoinColumn(name = "ID_CATEGORIA")
+	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "ID_CATEGORIA", nullable=true)
+	@Fetch(FetchMode.JOIN)
 	private Categoria categoria;
 
 	public Produto() {

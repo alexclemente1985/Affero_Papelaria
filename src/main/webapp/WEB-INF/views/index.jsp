@@ -10,49 +10,35 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title>{{titulo}}</title>
 
-<!-- <link rel="stylesheet" -->
-<!-- href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" /> -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+
+<link rel="stylesheet" href="css/materialize.min.css">
 
 <!-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> -->
 <script type="text/javascript"
-	src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+	src="js/lib/jquery-2.1.1.min.js"></script>
+<script src="js/materialize/materialize.min.js"></script>
 <script src="js/materialize/init.js"></script>
-<script
-	src="js/lib/angular.min.js"></script>
-<!-- <script
-	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script> -->
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular-route.min.js"></script>
+<script src="js/lib/angular.min.js"></script>
+
+<script src="js/lib/angular-route.min.js"></script>
+
 <script src="js/app/app.js"></script>
-<script src="js/app/controllers.js"></script>	
-<!-- <script
-	src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> -->
+<script src="js/app/controllers.js"></script>
 
-
-
-<!-- <script type="text/javascript">
-	 document.addEventListener('DOMContentLoaded', function() {
-		var elems = document.querySelectorAll('#modal1');
-		var instances = M.Modal.init(elems,options);
-	}); 
-</script> -->
-
-
-<!-- <script type="text/javascript" src="js/app/app.js"></script> -->
+<title>{{titulo}}</title>
 
 </head>
 <body ng-controller="papelariaController">
-	<header class="container">
+	<div class="container">
 		<div class="row">
-			<h2 ng-bind="titulo"></h2>
+			<nav class="nav-wrapper grey darken-4 white-text" style="padding:0px 10px;">
+				<h2 class="brand-logo" ng-bind="titulo"></h2>
+			</nav>
 		</div>
-	</header>
+	</div>
+
+
 	<main class="container">
 
 	<div class="row">
@@ -66,10 +52,11 @@
 			<table class="highlight">
 				<thead>
 					<tr>
-						<th>Código de barras</th>
-						<th>Nome do produto</th>
-						<th>Descrição do produto</th>
+						<th>Código</th>
+						<th>Produto</th>
+						<th>Descrição</th>
 						<th>Quantidade</th>
+						<th>Categoria</th>
 
 					</tr>
 				</thead>
@@ -78,7 +65,11 @@
 					<td>{{produto.nome}}</td>
 					<td>{{produto.descricao}}</td>
 					<td>{{produto.quantidade}}</td>
-					<!-- 	<td>{{produto.descCategoria}}</td> -->
+					<td>{{produto.categoria.descricao}}</td>
+					<td>
+						<button ng-click="exibirProduto(produto)" class="btn green">Exibir</button>
+					</td>
+					
 					<td><button ng-click="atualizarProduto(produto)"
 							class="btn blue">Editar</button></td>
 					<td>
@@ -86,17 +77,14 @@
 					</td>
 
 				</tr>
-				<tr>
-					<td>Média da quantidade de produtos:</td>
-					<td>{{media(produtos)}}</td>
-				</tr>
+
 			</table>
 		</div>
 
 		<div class="row">
 			<!-- Modal Trigger -->
 			<a ng-click="cadastrarProdutoOn()"
-				class="waves-effect waves-light btn" href="#modal1">Cadastrar
+				class="waves-effect waves-light btn grey darken-4" href="#modal1">Cadastrar
 				produto</a>
 		</div>
 	</main>
@@ -105,43 +93,62 @@
 	<div id="modal1" class="modal modal-fixed-footer">
 		<div class="modal-content">
 			<h4 ng-if="!edicao">Cadastro de produtos</h4>
+			<p ng-if="!edicao">Preencha os dados do novo produto</p>
 			<h4 ng-if="edicao">Edição de produtos</h4>
-			<p>Preencha os dados do novo produto</p>
+			<p ng-if="edicao">Atualize os dados do produto</p>
 
 			<div class="row">
-				<div class="input-field col m6 s6">
+				<div class="input-field col m6 s6" ng-if="!edicao">
 					<input type="text" class="validate" ng-model="produto.barcode"
-						pattern="[0-9]*" placeholder="Código de barras" required />
+						pattern="[0-9]*" placeholder="Código de Barras" required/>
+						
+				</div>
+				
+				<div class="input-field col m6 s6" ng-if="edicao">
+					<input type="text" ng-model="produto.barcode"
+						  value="{{produto.barcode}}" placeholder="{{produto.barcode}}" disabled/>
+						 
 				</div>
 
 				<div class="input-field col m6 s6">
-					<input type="text" class="validate" ng-model="produto.nome" placeholder="Nome" required/>
+					<input type="text" class="validate" ng-model="produto.nome" placeholder="Nome do Produto"
+						required />
+						
 				</div>
 
 				<div class="input-field col m6 s6">
-					<input type="text" class="validate" ng-model="produto.descricao" placeholder="Descrição"/>
+					<input type="text" class="validate" ng-model="produto.descricao" placeholder="Descrição do Produto"
+						 />
+						
 				</div>
 
 				<div class="input-field col m6 s6">
 					<input type="text" class="validate" ng-model="produto.quantidade"
-						pattern="[0-9]*" placeholder="Quantidade" required/>
+						pattern="[0-9]*" placeholder="Quantidade" required />
+						
 				</div>
 
-				<!-- <div class="input-field col m6 s6">
+				<div class="input-field col m6 s6">
+					<p ng-if="!edicao" style="color: #9e9e9e;">Categoria do Produto: </p>
+					<p ng-if="edicao" style="color: #9e9e9e;">Categoria do Produto: <b ng-disable="categoria && $invalid"> {{categoria.descricao}}</b> </p>
+					<select class="browser-default" ng-model="categoria" required>
 						
-						<input type="text" class="validate" ng-model="categoria.descricao"/>
-						<label>Categoria do produto</label>
-					</div> -->
+						<option ng-repeat="categoria in categorias" value="{{categoria}}">{{categoria.descricao}}</option>
+						
+					</select>
+					
+					{{categoria}}
+				</div>
 			</div>
-
+			
 
 		</div>
 		<div class="modal-footer">
-			<a ng-if="!edicao" ng-click="cadastrarProduto(produto)"
-				class="waves-effect waves-light btn-flat btn blue">Adicionar</a>
-			<a ng-if="edicao" ng-click="salvarProduto(produto)"
-				class="waves-effect waves-light btn-flat btn blue">Salvar</a>
-			<a href="#!" class="modal-close waves-effect waves-green btn-flat">Cancelar</a>
+			<a ng-if="!edicao" ng-click="cadastrarProduto(produto,categoria)"
+				class="waves-effect waves-light btn-flat btn grey darken-4 white-text" ng-disable="!$valid">Adicionar</a> <a
+				ng-if="edicao" ng-click="salvarProduto(produto,categoria)"
+				class="waves-effect waves-light btn-flat btn grey darken-4 white-text" ng-disable="!$valid">Salvar</a> <a
+				href="#!" class="modal-close waves-effect waves-grey darken-1 btn-flat">Cancelar</a>
 		</div>
 
 	</div>
