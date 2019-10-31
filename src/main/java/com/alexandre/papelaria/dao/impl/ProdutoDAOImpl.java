@@ -51,7 +51,8 @@ public class ProdutoDAOImpl implements ProdutoDAO {
 	public void atualizarProduto(Produto p) {
 		Session session = sessionFactory.getCurrentSession();
 		session.clear();
-		session.update(p);
+		session.persist(p);
+		session.save(p);
 		session.flush();
 
 	}

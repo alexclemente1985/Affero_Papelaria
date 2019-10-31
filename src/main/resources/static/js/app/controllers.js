@@ -110,8 +110,10 @@ angular.module("papelariaManager").controller("papelariaController",function($sc
 		produto.quantidade=parseInt(produto.quantidade);
 		
 		categoria.id=parseInt(categoria.id);
-		produto.categoria.id = categoria.id;
-		produto.categoria.descricao = categoria.descricao;
+		categoria = JSON.parse(categoria);
+		produto.categoria = Object.create(categoria);
+//		produto.categoria.id = categoria.id;
+//		produto.categoria.descricao = categoria.descricao;
 		console.log(produto);
 		
 		editar(produto);
@@ -166,6 +168,8 @@ angular.module("papelariaManager").controller("papelariaController",function($sc
 	
 	
 	var editar = function(produto){
+		console.log(produto);
+		
 		$http({
 			method: 'PUT',
 			url: 'http://localhost:8080/papelaria/atualizarproduto',

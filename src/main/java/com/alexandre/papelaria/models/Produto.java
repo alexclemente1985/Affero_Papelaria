@@ -34,7 +34,7 @@ public class Produto implements Serializable {
 	@Column(name = "QUANTIDADE")
 	private Integer quantidade;
 
-	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@ManyToOne(fetch=FetchType.EAGER, cascade = CascadeType.PERSIST, optional=true)
 	@JoinColumn(name = "ID_CATEGORIA", nullable=true)
 	@Fetch(FetchMode.JOIN)
 	private Categoria categoria;
